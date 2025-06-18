@@ -51,7 +51,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/tipo/{tipoProduto}")
-    public ResponseEntity<List<ProdutoResponseDTO>> findByTipo(String tipoProduto) {
+    public ResponseEntity<List<ProdutoResponseDTO>> findByTipo(@PathVariable String tipoProduto) {
         List<ProdutoResponseDTO> produtos = produtoService.findByTipo(tipoProduto);
         return ResponseEntity.ok(produtos);
     }

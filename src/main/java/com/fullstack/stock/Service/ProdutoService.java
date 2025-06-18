@@ -65,15 +65,13 @@ public class ProdutoService {
     }
 
     public List<ProdutoResponseDTO> findByTipo(String tipoProduto) {
-        TipoProdutoEnum tipoEnum;
         try {
-            tipoEnum = TipoProdutoEnum.valueOf(tipoProduto.toUpperCase());
+            var tipoEnum = TipoProdutoEnum.valueOf(tipoProduto.toUpperCase().trim());
+            var produtos = produtoRepository.findByTipoProduto(tipoEnum);
+            return produtos.stream().map(this::toResponseDTO).toList();
         } catch (IllegalArgumentException e) {
             throw new EntityNotFoundException("Tipo de produto inválido: " + tipoProduto);
         }
-
-        var produtos = produtoRepository.findByTipoProduto(tipoEnum);
-        return produtos.stream().map(this::toResponseDTO).toList();
     }
 
     // Método qie converte produto para produtoResponseDTO
