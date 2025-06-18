@@ -11,5 +11,5 @@ import java.util.List;
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     // Método que efetua a busca por tipo de produto
-    List<Produto> findByTipo(TipoProdutoEnum tipoProduto);
+    List<Produto> findByTipoProduto(TipoProdutoEnum tipoProduto);
 }

@@ -72,7 +72,7 @@ public class ProdutoService {
             throw new EntityNotFoundException("Tipo de produto inválido: " + tipoProduto);
         }
 
-        var produtos = produtoRepository.findByTipo(tipoEnum);
+        var produtos = produtoRepository.findByTipoProduto(tipoEnum);
         return produtos.stream().map(this::toResponseDTO).toList();
     }
 
