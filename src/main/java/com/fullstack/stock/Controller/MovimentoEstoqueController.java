@@ -22,7 +22,7 @@ public class MovimentoEstoqueController {
     @PostMapping
     public ResponseEntity<MovimentoEstoqueResponseDTO> criarMovimento(@RequestBody MovimentoEstoqueRequestDTO requestDTO) {
         MovimentoEstoqueResponseDTO responseDTO = movimentoEstoqueService.criarMovimento(requestDTO);
-        URI location = URI.create("/movimentos/" + responseDTO.getId());
+        URI location = URI.create("/movimentos/" + responseDTO.id());
         return ResponseEntity.created(location).body(responseDTO);
     }
 
