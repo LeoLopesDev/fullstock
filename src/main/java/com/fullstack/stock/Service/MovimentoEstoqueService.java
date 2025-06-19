@@ -1,0 +1,86 @@
+package com.fullstack.stock.Service;
+
+import com.fullstack.stock.DTO.MovimentoEstoqueRequestDTO;
+import com.fullstack.stock.DTO.MovimentoEstoqueResponseDTO;
+import com.fullstack.stock.Entity.MovimentoEstoque;
+import com.fullstack.stock.Enum.TipoMovimentacao;
+import com.fullstack.stock.Repository.MovimentoEstoqueRepository;
+import com.fullstack.stock.Repository.ProdutoRepository;
+import com.fullstack.stock.Entity.Produto;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class MovimentoEstoqueService {
+
+    private final MovimentoEstoqueRepository movimentoEstoqueRepository;
+    private final ProdutoRepository produtoRepository;
+
+    public MovimentoEstoqueService(MovimentoEstoqueRepository movimentoEstoqueRepository, ProdutoRepository produtoRepository) {
+        this.movimentoEstoqueRepository = movimentoEstoqueRepository;
+        this.produtoRepository = produtoRepository;
+    }
+
+    public MovimentoEstoqueResponseDTO criarMovimento(MovimentoEstoqueRequestDTO requestDTO) {
+        Produto produto = produtoRepository.findById(requestDTO.getProdutoId())
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+
+        MovimentoEstoque movimento = new MovimentoEstoque();
+        movimento.setProduto(produto);
+        movimento.setTipoMovimentacao(requestDTO.getTipoMovimentacao());
+        movimento.setValorVenda(requestDTO.getValorVenda());
+        movimento.setDataVenda(requestDTO.getDataVenda());
+        movimento.setQuantidadeMovimentada(requestDTO.getQuantidadeMovimentada());
+
+        MovimentoEstoque salvo = movimentoEstoqueRepository.save(movimento);
+
+        return new MovimentoEstoqueResponseDTO(
+                salvo.getId(),
+                salvo.getProduto().getId(),
+                salvo.getProduto().getCodigo(),
+                salvo.getTipoMovimentacao(),
+                salvo.getValorVenda(),
+                salvo.getDataVenda(),
+                salvo.getQuantidadeMovimentada()
+        );
+    }
+
+    public List<MovimentoEstoqueResponseDTO> listarMovimentos() {
+        return movimentoEstoqueRepository.findAll().stream()
+                .map(movimento -> new MovimentoEstoqueResponseDTO(
+                        movimento.getId(),
+                        movimento.getProduto().getId(),
+                        movimento.getProduto().getCodigo(),
+                        movimento.getTipoMovimentacao(),
+                        movimento.getValorVenda(),
+                        movimento.getDataVenda(),
+                        movimento.getQuantidadeMovimentada()
+                )).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deletarMovimento(Long id) {
+        MovimentoEstoque movimento = movimentoEstoqueRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Movimento não encontrado"));
+
+        Produto produto = movimento.getProduto();
+
+        if (movimento.getTipoMovimentacao() == TipoMovimentacao.ENTRADA) {
+            if (produto.getQuantidadeEstoque() < movimento.getQuantidadeMovimentada()) {
+                throw new RuntimeException("Não é possível remover esta entrada pois resultaria em estoque negativo.");
+            }
+            produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - movimento.getQuantidadeMovimentada());
+        } else if (movimento.getTipoMovimentacao() == TipoMovimentacao.SAIDA) {
+            produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() + movimento.getQuantidadeMovimentada());
+        }
+
+        produtoRepository.save(produto);
+        movimentoEstoqueRepository.delete(movimento);
+    }
+
+
+
+}
