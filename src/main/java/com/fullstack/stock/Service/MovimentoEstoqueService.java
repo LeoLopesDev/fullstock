@@ -25,15 +25,15 @@ public class MovimentoEstoqueService {
     }
 
     public MovimentoEstoqueResponseDTO criarMovimento(MovimentoEstoqueRequestDTO requestDTO) {
-        Produto produto = produtoRepository.findById(requestDTO.getProdutoId())
+        Produto produto = produtoRepository.findById(requestDTO.produtoId())
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         MovimentoEstoque movimento = new MovimentoEstoque();
         movimento.setProduto(produto);
-        movimento.setTipoMovimentacao(requestDTO.getTipoMovimentacao());
-        movimento.setValorVenda(requestDTO.getValorVenda());
-        movimento.setDataVenda(requestDTO.getDataVenda());
-        movimento.setQuantidadeMovimentada(requestDTO.getQuantidadeMovimentada());
+        movimento.setTipoMovimentacao(requestDTO.tipoMovimentacao());
+        movimento.setValorVenda(requestDTO.valorVenda());
+        movimento.setDataVenda(requestDTO.dataVenda());
+        movimento.setQuantidadeMovimentada(requestDTO.quantidadeMovimentada());
 
         MovimentoEstoque salvo = movimentoEstoqueRepository.save(movimento);
 

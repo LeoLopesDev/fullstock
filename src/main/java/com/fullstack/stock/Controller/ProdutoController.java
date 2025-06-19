@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,9 @@ public class ProdutoController {
     @PostMapping
     public ResponseEntity<ProdutoResponseDTO> add(@RequestBody @Valid ProdutoRequestDTO produtoRequestDTO) {
         ProdutoResponseDTO response = produtoService.add(produtoRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity
+                .created(URI.create("/produtos/" + response.id()))
+                .body(response);
     }
 
     @GetMapping

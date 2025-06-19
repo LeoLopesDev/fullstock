@@ -11,7 +11,7 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "codigo", nullable = false)
+    @Column(name = "codigo", nullable = false, unique = true)
     private String codigo;
 
     @Column(name = "descricao")
