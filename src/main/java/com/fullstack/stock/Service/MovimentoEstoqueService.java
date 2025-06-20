@@ -94,7 +94,7 @@ public class MovimentoEstoqueService {
     public List<MovimentoEstoqueResponseDTO> findByTipo(String tipoProduto) {
         try {
             var tipoEnum = TipoProdutoEnum.valueOf(tipoProduto.toUpperCase().trim());
-            var movimentos = movimentoEstoqueRepository.findByTipoProduto(tipoEnum);
+            var movimentos = movimentoEstoqueRepository.findByProduto_TipoProduto(tipoEnum);
             return movimentos.stream().map(this::toResponseDTO).toList();
         } catch (IllegalArgumentException e) {
             throw new EntityNotFoundException("Tipo de produto inválido: " + tipoProduto);

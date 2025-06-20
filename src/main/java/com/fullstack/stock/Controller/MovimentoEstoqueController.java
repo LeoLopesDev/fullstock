@@ -44,5 +44,4 @@ public class MovimentoEstoqueController {
        List<MovimentoEstoqueResponseDTO> produtos = movimentoEstoqueService.findByTipo(tipoProduto);
        return ResponseEntity.ok(produtos);
     }
-    //TODO CRIAR MÉTODO QUE BUSCA O MOVIMENTO POR TIPO DE PRODUTO
 }

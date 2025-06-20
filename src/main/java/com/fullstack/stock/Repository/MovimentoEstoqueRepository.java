@@ -12,5 +12,5 @@ import java.util.List;
 public interface MovimentoEstoqueRepository extends JpaRepository<MovimentoEstoque, Long> {
 
     // Método que busca as movimentações por tipo de produto
-    List<MovimentoEstoque> findByTipoProduto(TipoProdutoEnum tipoProduto);
+    List<MovimentoEstoque> findByProduto_TipoProduto(TipoProdutoEnum tipoProduto);
 }
