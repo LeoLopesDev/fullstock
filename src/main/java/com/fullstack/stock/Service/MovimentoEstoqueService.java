@@ -24,16 +24,31 @@ public class MovimentoEstoqueService {
         this.produtoRepository = produtoRepository;
     }
 
+    @Transactional
     public MovimentoEstoqueResponseDTO criarMovimento(MovimentoEstoqueRequestDTO requestDTO) {
         Produto produto = produtoRepository.findById(requestDTO.produtoId())
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+
+        int quantidadeMov = requestDTO.quantidadeMovimentada();
+
+        if (requestDTO.tipoMovimentacao() == TipoMovimentacao.SAIDA) {
+
+            if (produto.getQuantidadeEstoque() < quantidadeMov) {
+                throw new RuntimeException("Estoque insuficiente para esta saída");
+            }
+            produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - quantidadeMov);
+        } else if (requestDTO.tipoMovimentacao() == TipoMovimentacao.ENTRADA) {
+            produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() + quantidadeMov);
+        }
+
+        produtoRepository.save(produto);
 
         MovimentoEstoque movimento = new MovimentoEstoque();
         movimento.setProduto(produto);
         movimento.setTipoMovimentacao(requestDTO.tipoMovimentacao());
         movimento.setValorVenda(requestDTO.valorVenda());
         movimento.setDataVenda(requestDTO.dataVenda());
-        movimento.setQuantidadeMovimentada(requestDTO.quantidadeMovimentada());
+        movimento.setQuantidadeMovimentada(quantidadeMov);
 
         MovimentoEstoque salvo = movimentoEstoqueRepository.save(movimento);
 
