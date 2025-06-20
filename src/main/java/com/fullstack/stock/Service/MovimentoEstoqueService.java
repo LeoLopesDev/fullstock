@@ -92,13 +92,18 @@ public class MovimentoEstoqueService {
     }
 
     public List<MovimentoEstoqueResponseDTO> findByTipo(String tipoProduto) {
+        TipoProdutoEnum tipoEnum;
+
         try {
-            var tipoEnum = TipoProdutoEnum.valueOf(tipoProduto.toUpperCase().trim());
-            var movimentos = movimentoEstoqueRepository.findByProduto_TipoProduto(tipoEnum);
-            return movimentos.stream().map(this::toResponseDTO).toList();
+            tipoEnum = TipoProdutoEnum.valueOf(tipoProduto);
         } catch (IllegalArgumentException e) {
-            throw new EntityNotFoundException("Tipo de produto inválido: " + tipoProduto);
+            throw new RuntimeException("Tipo de produto inválido");
         }
+
+        return movimentoEstoqueRepository.findByProduto_TipoProduto(tipoEnum)
+                .stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     //Implementação do métoodo de conversão en entity para dto
