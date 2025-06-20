@@ -6,6 +6,7 @@ import com.fullstack.stock.Service.MovimentoEstoqueService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.net.URI;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class MovimentoEstoqueController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarMovimento(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarMovimento(@PathVariable BigInteger id) {
         movimentoEstoqueService.deletarMovimento(id);
         return ResponseEntity.noContent().build();
     }

@@ -8,6 +8,7 @@ import com.fullstack.stock.Repository.ProdutoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -55,11 +56,11 @@ public class ProdutoService {
         return toResponseDTO(produtoAtualizado);
     }
 
-    public void delete(Long id) {
-        if (!produtoRepository.existsById(id)) {
+    public void delete(BigInteger id) {
+        if (!produtoRepository.existsById(id.longValue())) {
             throw new EntityNotFoundException("Produto não encontrado");
         }
-        produtoRepository.deleteById(id);
+        produtoRepository.deleteById(id.longValue());
     }
 
     public List<ProdutoResponseDTO> findByTipo(String tipoProduto) {

@@ -10,6 +10,7 @@ import com.fullstack.stock.Entity.Produto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,8 +78,8 @@ public class MovimentoEstoqueService {
     }
 
     @Transactional
-    public void deletarMovimento(Long id) {
-        MovimentoEstoque movimento = movimentoEstoqueRepository.findById(id)
+    public void deletarMovimento(BigInteger id) {
+        MovimentoEstoque movimento = movimentoEstoqueRepository.findById(id.longValue())
                 .orElseThrow(() -> new RuntimeException("Movimento não encontrado"));
 
         Produto produto = movimento.getProduto();
