@@ -11,9 +11,6 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "codigo", nullable = false, unique = true)
-    private String codigo;
-
     @Column(name = "descricao")
     private String descricao;
 
@@ -27,9 +24,9 @@ public class Produto {
     @Column(name = "quantidade_estoque")
     private int quantidadeEstoque;
 
+    //Construtor mantido como boa prática para evoluções futuras
     public Produto(long id, String codigo, String descricao, TipoProdutoEnum tipoProduto, double valorFornecedor, int quantidadeEstoque) {
         this.id = id;
-        this.codigo = codigo;
         this.descricao = descricao;
         this.tipoProduto = tipoProduto;
         this.valorFornecedor = valorFornecedor;
@@ -41,14 +38,6 @@ public class Produto {
 
     public long getId() {
         return id;
-    }
-
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
     }
 
     public String getDescricao() {

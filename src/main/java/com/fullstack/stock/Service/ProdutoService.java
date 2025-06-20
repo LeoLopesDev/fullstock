@@ -27,7 +27,6 @@ public class ProdutoService {
 
     public ProdutoResponseDTO add(ProdutoRequestDTO produtoRequestDTO) {
         Produto produto = new Produto();
-        produto.setCodigo(produtoRequestDTO.codigo());
         produto.setDescricao(produtoRequestDTO.descricao());
         produto.setTipoProduto(produtoRequestDTO.tipoProduto());
         produto.setValorFornecedor(produtoRequestDTO.valorFornecedor());
@@ -47,7 +46,6 @@ public class ProdutoService {
         Produto produto = produtoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
 
-        produto.setCodigo(produtoRequestDTO.codigo());
         produto.setDescricao(produtoRequestDTO.descricao());
         produto.setTipoProduto(produtoRequestDTO.tipoProduto());
         produto.setValorFornecedor(produtoRequestDTO.valorFornecedor());
@@ -78,7 +76,6 @@ public class ProdutoService {
     private ProdutoResponseDTO toResponseDTO(Produto produto) {
         return new ProdutoResponseDTO(
                 produto.getId(),
-                produto.getCodigo(),
                 produto.getDescricao(),
                 produto.getTipoProduto(),
                 produto.getValorFornecedor(),

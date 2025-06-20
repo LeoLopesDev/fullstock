@@ -55,7 +55,6 @@ public class MovimentoEstoqueService {
         return new MovimentoEstoqueResponseDTO(
                 salvo.getId(),
                 salvo.getProduto().getId(),
-                salvo.getProduto().getCodigo(),
                 salvo.getTipoMovimentacao(),
                 salvo.getValorVenda(),
                 salvo.getDataVenda(),
@@ -68,7 +67,6 @@ public class MovimentoEstoqueService {
                 .map(movimento -> new MovimentoEstoqueResponseDTO(
                         movimento.getId(),
                         movimento.getProduto().getId(),
-                        movimento.getProduto().getCodigo(),
                         movimento.getTipoMovimentacao(),
                         movimento.getValorVenda(),
                         movimento.getDataVenda(),

@@ -30,6 +30,7 @@ public class MovimentoEstoque {
     @Column(name = "quantidade_movimentada")
     private int quantidadeMovimentada;
 
+    //Construtor mantido como boa prática visando futuras evoluções
     public MovimentoEstoque(long id, Produto produto, TipoMovimentacao tipoMovimentacao, double valorVenda, LocalDateTime dataVenda, int quantidadeMovimentada) {
         this.id = id;
         this.produto = produto;
