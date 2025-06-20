@@ -1,5 +1,6 @@
 package com.fullstack.stock.Service;
 
+import com.fullstack.stock.DTO.BalancoFinanceiroDTO;
 import com.fullstack.stock.DTO.MovimentoEstoqueRequestDTO;
 import com.fullstack.stock.DTO.MovimentoEstoqueResponseDTO;
 import com.fullstack.stock.Entity.MovimentoEstoque;
@@ -104,6 +105,10 @@ public class MovimentoEstoqueService {
                 .stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    public List<BalancoFinanceiroDTO> listarBalancoPorProduto() {
+        return movimentoEstoqueRepository.calcularBalancoFinanceiroPorProduto();
     }
 
     //Implementação do métoodo de conversão en entity para dto

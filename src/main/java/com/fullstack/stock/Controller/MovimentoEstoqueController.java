@@ -1,5 +1,6 @@
 package com.fullstack.stock.Controller;
 
+import com.fullstack.stock.DTO.BalancoFinanceiroDTO;
 import com.fullstack.stock.DTO.MovimentoEstoqueRequestDTO;
 import com.fullstack.stock.DTO.MovimentoEstoqueResponseDTO;
 import com.fullstack.stock.Service.MovimentoEstoqueService;
@@ -41,7 +42,13 @@ public class MovimentoEstoqueController {
 
     @GetMapping("/tipo/{tipoProduto}")
     public ResponseEntity<List<MovimentoEstoqueResponseDTO>> findByTipo(@PathVariable String tipoProduto) {
-       List<MovimentoEstoqueResponseDTO> produtos = movimentoEstoqueService.findByTipo(tipoProduto);
-       return ResponseEntity.ok(produtos);
+        List<MovimentoEstoqueResponseDTO> produtos = movimentoEstoqueService.findByTipo(tipoProduto);
+        return ResponseEntity.ok(produtos);
     }
+
+    @GetMapping("/balanco")
+    public ResponseEntity<List<BalancoFinanceiroDTO>> listarBalanco() {
+        return ResponseEntity.ok(movimentoEstoqueService.listarBalancoPorProduto());
+        }
+
 }
