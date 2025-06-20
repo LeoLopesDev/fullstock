@@ -57,10 +57,10 @@ public class ProdutoService {
     }
 
     public void delete(BigInteger id) {
-        if (!produtoRepository.existsById(id.longValue())) {
-            throw new EntityNotFoundException("Produto não encontrado");
-        }
-        produtoRepository.deleteById(id.longValue());
+        Produto produto = produtoRepository.findById(id.longValue())
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
+
+        produtoRepository.delete(produto);
     }
 
     public List<ProdutoResponseDTO> findByTipo(String tipoProduto) {

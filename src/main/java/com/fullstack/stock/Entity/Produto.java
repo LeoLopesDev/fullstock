@@ -3,6 +3,8 @@ package com.fullstack.stock.Entity;
 import com.fullstack.stock.Enum.TipoProdutoEnum;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "produto")
 public class Produto {
@@ -23,6 +25,9 @@ public class Produto {
 
     @Column(name = "quantidade_estoque")
     private int quantidadeEstoque;
+
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MovimentoEstoque> movimentacoes;
 
     //Construtor mantido como boa prática para evoluções futuras
     public Produto(long id, String codigo, String descricao, TipoProdutoEnum tipoProduto, double valorFornecedor, int quantidadeEstoque) {
