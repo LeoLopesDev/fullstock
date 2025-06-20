@@ -37,4 +37,12 @@ public class MovimentoEstoqueController {
         movimentoEstoqueService.deletarMovimento(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    @GetMapping("/tipo/{tipoProduto}")
+    public ResponseEntity<List<MovimentoEstoqueResponseDTO>> findByTipo(@PathVariable String tipoProduto) {
+       List<MovimentoEstoqueResponseDTO> produtos = movimentoEstoqueService.findByTipo(tipoProduto);
+       return ResponseEntity.ok(produtos);
+    }
+    //TODO CRIAR MÉTODO QUE BUSCA O MOVIMENTO POR TIPO DE PRODUTO
 }

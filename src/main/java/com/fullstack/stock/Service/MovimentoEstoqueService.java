@@ -4,9 +4,11 @@ import com.fullstack.stock.DTO.MovimentoEstoqueRequestDTO;
 import com.fullstack.stock.DTO.MovimentoEstoqueResponseDTO;
 import com.fullstack.stock.Entity.MovimentoEstoque;
 import com.fullstack.stock.Enum.TipoMovimentacao;
+import com.fullstack.stock.Enum.TipoProdutoEnum;
 import com.fullstack.stock.Repository.MovimentoEstoqueRepository;
 import com.fullstack.stock.Repository.ProdutoRepository;
 import com.fullstack.stock.Entity.Produto;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,15 +55,7 @@ public class MovimentoEstoqueService {
 
         MovimentoEstoque salvo = movimentoEstoqueRepository.save(movimento);
 
-        return new MovimentoEstoqueResponseDTO(
-                salvo.getId(),
-                salvo.getProduto().getId(),
-                salvo.getProduto().getDescricao(),
-                salvo.getTipoMovimentacao(),
-                salvo.getValorVenda(),
-                salvo.getDataVenda(),
-                salvo.getQuantidadeMovimentada()
-        );
+        return toResponseDTO(salvo);
     }
 
     public List<MovimentoEstoqueResponseDTO> listarMovimentos() {
@@ -86,7 +80,7 @@ public class MovimentoEstoqueService {
 
         if (movimento.getTipoMovimentacao() == TipoMovimentacao.ENTRADA) {
             if (produto.getQuantidadeEstoque() < movimento.getQuantidadeMovimentada()) {
-                throw new RuntimeException("Não é possível remover esta entrada pois resultaria em estoque negativo.");
+                throw new RuntimeException("Estoque insuficiente para esta movimentação.");
             }
             produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - movimento.getQuantidadeMovimentada());
         } else if (movimento.getTipoMovimentacao() == TipoMovimentacao.SAIDA) {
@@ -97,6 +91,26 @@ public class MovimentoEstoqueService {
         movimentoEstoqueRepository.delete(movimento);
     }
 
+    public List<MovimentoEstoqueResponseDTO> findByTipo(String tipoProduto) {
+        try {
+            var tipoEnum = TipoProdutoEnum.valueOf(tipoProduto.toUpperCase().trim());
+            var movimentos = movimentoEstoqueRepository.findByTipoProduto(tipoEnum);
+            return movimentos.stream().map(this::toResponseDTO).toList();
+        } catch (IllegalArgumentException e) {
+            throw new EntityNotFoundException("Tipo de produto inválido: " + tipoProduto);
+        }
+    }
 
-
+    //Implementação do métoodo de conversão en entity para dto
+    private MovimentoEstoqueResponseDTO toResponseDTO(MovimentoEstoque movimento) {
+        return new MovimentoEstoqueResponseDTO(
+                movimento.getId(),
+                movimento.getProduto().getId(),
+                movimento.getProduto().getDescricao(),
+                movimento.getTipoMovimentacao(),
+                movimento.getValorVenda(),
+                movimento.getDataVenda(),
+                movimento.getQuantidadeMovimentada()
+        );
+    }
 }
